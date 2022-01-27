@@ -1,0 +1,238 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<malloc.h>
+struct polynomial
+{
+        int exp,coeff;
+        struct polynomial *next;
+};
+typedef struct polynomial node;
+node *addterm(node *first,node *new);
+node *create()
+{
+        node *first=NULL,*new;
+        char c;
+        do
+        {
+
+                new=(node*)malloc(sizeof(node));
+                new->next=NULL;
+                printf("\nenter coefficient:");
+                scanf("%d",&new->coeff);
+                printf("\nenter exponenet:");
+                scanf("%d",&new->exp);
+                first=addterm(first,new);
+                printf("\nenter another term(enter n to stop):");
+                scanf(" %c",&c);
+        }while(c!='n');
+        return(first);
+}
+node *addterm(node *first,node *new)
+{
+        node *temp,*temp1;
+        if(first==NULL)
+        {
+                first=new;
+        }
+        else if(first->exp < new->exp)
+        {
+                new->next=first;
+                first=new;
+        }
+        else
+        {
+                temp=first->next;
+                temp1=first;
+                while(temp!=NULL&&temp->exp > new->exp)
+                {
+                        temp1=temp;
+                        temp=temp->next;
+                }
+                if(temp==NULL)
+                {
+                        temp1->next=new;
+                }
+                else if(temp->exp==new->exp)
+                {
+                        temp->coeff = temp->coeff + new->coeff;
+                }
+                else
+                {
+                        temp1->next=new;
+                        new->next=temp;
+                }
+        }
+        return first;
+}
+node *add(node *p1,node *p2)
+{
+        node *p3=NULL,*new;
+        while(p1!=NULL&&p2!=NULL)
+        {
+                new=(node*)malloc(sizeof(node));
+                new->next=NULL;
+                if(p1->exp > p2->exp)
+                {
+                        new->coeff=p1->coeff;
+                        new->exp=p1->exp;
+                        p3=addterm(p3,new);
+                        p1=p1->next;
+                }
+                else if(p1->exp < p2->exp)
+                {
+                        new->coeff=p2->coeff;
+                        new->exp=p2->exp;
+                        p3=addterm(p3,new);
+                        p2=p2->next;
+                }
+                else
+                {
+                        new->coeff =p1->coeff+p2->coeff;
+                        new->exp=p1->exp;
+                        p3=addterm(p3,new);
+                        p1=p1->next;
+                        p2=p2->next;
+                }
+        }
+        if(p1==NULL)
+        {
+                while(p2!=NULL)
+                {
+                        new=(node*)malloc(sizeof(node));
+                        new->coeff=p2->coeff;
+                        new->exp=p2->exp;
+                        p3=addterm(p3,new);
+                        p2=p2->next;
+                }
+        }
+        if(p2==NULL)
+        {
+                while(p1!=NULL)
+                {
+                        new=(node*)malloc(sizeof(node));
+                        new->coeff=p1->coeff;
+                        new->exp=p1->exp;
+                        p3=addterm(p3,new);
+                        p1=p1->next;
+                }
+        }
+        return p3;
+}
+node *sub(node *p1,node *p2)
+{
+        node *p3=NULL,*new;
+        while(p1!=NULL && p2!=NULL)
+        {
+                new=(node*)malloc(sizeof(node));
+                new->next=NULL;
+                if(p1->exp > p2->exp)
+                {
+                        new->coeff=p1->coeff;
+                        new->exp=p1->exp;
+                        p3=addterm(p3,new);
+                        p1=p1->next;
+                }
+                else if(p1->exp < p2->exp)
+                {
+                        new->coeff=-p2->coeff;
+                        new->exp=p2->exp;
+                        p3=addterm(p3,new);
+                        p2=p2->next;
+                }
+                else
+                {
+                        new->coeff=p1->coeff-p2->coeff;
+                        new->exp=p1->exp;
+                        p3=addterm(p3,new);
+                        p1=p1->next;
+                        p2=p2->next;
+                }
+        }
+        if(p1==NULL)
+        {
+                while(p2!=NULL)
+                {
+                        new=(node*)malloc(sizeof(node));
+                        new->coeff=-p2->coeff;
+                        new->exp=p2->exp;
+                        p3=addterm(p3,new);
+                        p2=p2->next;
+                }
+        }
+        if(p2==NULL)
+        {
+                while(p1!=NULL)
+                {
+                        new=(node*)malloc(sizeof(node));
+                        new->coeff=p1->coeff;
+                        new->exp=p1->exp;
+                        p3=addterm(p3,new);
+                        p1=p1->next;
+                }
+        }
+        return p3;
+}
+node *mul(node *P1,node *p2)
+{
+        node *p3=NULL,*new,*temp=p2;
+        node *p1;
+        while(p1!=NULL)
+        {
+                p2=temp;
+                while(p2!=NULL)
+                {
+                        new=(node*)malloc(sizeof(node));
+                        new->coeff=p1->coeff*p2->coeff;
+                        new->exp=p1->exp+p2->exp;
+                        new->next=NULL;
+                        p3=addterm(p3,new);
+                        p2=p2->next;
+                }
+                p1=p1->next;
+        }
+        return p3;
+}
+void display(node *p)
+{
+        node *temp=p;
+        while(temp!=NULL)
+        {
+                printf("|%dX^%d|+",temp->coeff,temp->exp);
+                temp=temp->next;
+        }
+        printf("NULL");
+}
+void main()
+{
+        node *p1,*p2,*p3;
+        int m;
+        printf("\ncreate first polynomial");
+        p1=create();
+        display(p1);
+        printf("\ncreate second polynomial");
+        p2=create();
+        display(p2);
+        while(1)
+        {
+                printf("\nenter choice");
+                scanf("%d",&m);
+                switch(m)
+                {
+                        case 1:p3=add(p1,p2);
+                               printf("The result of addition is:");
+                               display(p3);
+                               break;
+                        case 2:p3=sub(p1,p2);
+                               printf("the result of subtraction is:");
+                               display(p3);
+                               break;
+                        case 3:p3=mul(p1,p2);
+                               printf("the result of multiplication is:");
+                               display(p3);
+                               break;
+                        case 4:exit(0);
+                       default:printf("\ncheck choice");
+                                break;
+                }
+        }
+}
