@@ -1,0 +1,168 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<malloc.h>
+void insert(int [], int);
+void search(int [],int);
+void delete(int [],int);
+void display(int []);
+void main()
+{
+        int a[10],x,flag=0,ch,i;
+        for(i=0;i<10;i++)
+        {
+                a[i]=-1;
+        }
+        while(1)
+        {
+                printf("\n 1.insert \n 2.search \n 3.delete \n 4.display \n 5.exit");
+                printf("\nenter choice");
+                scanf("%d",&ch);
+                switch(ch)
+                {
+                        case 1:printf("enter elemnt to insert");
+                               scanf("%d",&x);
+                               insert(a,x);
+                               break;
+                        case 2:printf("enter element to search");
+                               scanf("%d",&x);
+                               search(a,x);
+                               break;
+                        case 3:printf("\nenter element to delete");
+                               scanf("%d",&x);
+                               delete(a,x);
+                               break;
+                        case 4:printf("\nelements in hash table are:");
+                               printf("\n");
+                               display(a);
+                               break;
+                        case 5:exit(1);
+                }
+        }
+}
+int hash(int x)
+{
+        return x%10;
+}
+void insert(int a[10],int x)
+{
+        int i=hash(x);
+        int flag=0,j;
+        if(a[i]==-1)
+        {
+                a[i]=x;
+                flag=1;
+        }
+        else
+        {
+                for(j=i+1;i<10;j++)
+                {
+                        if(a[j]==-1)
+                        {
+                                a[j]=x;
+                                flag=1;
+                                break;
+                        }
+                }
+                for(j=0;j<i&&flag==0;j++)
+                {
+                        if(a[j]==-1)
+                        {
+                                a[j]=x;
+                                flag=1;
+                                break;
+                        }
+                }
+        }
+        if(flag==0)
+        {
+                printf(" no slot to place element %d",x);
+        }
+}
+void display(int a[10])
+{
+        int i;
+        for(i=0;i<10;i++)
+        {
+                printf("%d\t",i);
+        }
+        printf("\n");
+        for(i=0;i<10;i++)
+        {
+                printf("%d\t",a[i]);
+        }
+}
+void search(int a[10],int x)
+{
+        int i=hash(x);
+        int flag=0,j;
+        if(a[i]==x)
+        {
+                flag=1;
+        }
+        else
+        {
+                for(j=i+1;j<10;j++)
+                {
+                        if(a[j]==x)
+                        {
+                                flag=1;
+                                break;
+                        }
+                }
+                for(j=0;j<i && flag==0;j++)
+                {
+                        if(a[j]==x)
+                        {
+                                flag=1;
+                                break;
+                        }
+                }
+        }
+        if(flag==1)
+        {
+                printf("element %d is found",x);
+        }
+        else
+        {
+                printf("element %d is not found",x);
+        }
+}
+void delete(int a[10],int x)
+{
+        int i=hash(x),j;
+        int flag=0;
+        if(a[i]==x)
+        {
+                a[i]=-1;
+                flag=1;
+        }
+        else
+        {
+                for(j=i+1;j<10;j++)
+                {
+                        if(a[i]==x)
+                        {
+                                a[j]=-1;
+                                flag=1;
+                                break;
+                        }
+                }
+                for(j=0;j<i && flag==0;j++)
+                {
+                        if(a[j]==x)
+                        {
+                                a[j]=-1;
+                                flag=1;
+                                break;
+                        }
+                }
+        }
+        if(flag==1)
+        {
+                printf("element %d is found",x);
+        }
+        else
+        {
+                printf("element %d is not found",x);
+        }
+}
