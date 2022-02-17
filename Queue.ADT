@@ -1,0 +1,90 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define MAX 50
+int a[MAX],fornt=-1,rear=-1;
+void enqueue(int x)
+{
+    if(fornt==MAX-1)
+    {
+        printf("queue overflow");
+    }
+    else
+    {
+        if(fornt==-1)
+        {
+            fornt=rear=0;
+        }
+        else
+        {
+            ++rear;
+        }
+        a[rear]=x;
+    }
+}
+int dequeue()
+{
+    int x;
+    if(fornt==-1)
+    {
+        return -1;
+    }
+    else
+    {
+        x=a[fornt];
+        if(fornt==rear)
+        {
+            fornt=rear=0;
+        }
+        else
+        {
+            ++fornt;
+        }
+        return x;
+    }
+}
+void display()
+{
+    int i;
+    if(fornt==-1)
+    {
+        printf("no elements in queue");
+    }
+    else
+    {
+        for(i=fornt;i<=rear;i++)
+        {
+            printf("%d",a[i]);
+        }
+    }
+}
+void main()
+{
+    int x,ch,c;
+    while(1)
+    {
+        printf("1.enqueue\n 2.dequeue\n 3.dispaly \n 4.exit");
+        printf("enter choice");
+        scanf("%d",&ch);
+        switch(ch)
+        {
+            case 1:printf("enter element to insert");
+                   scanf("%d",&x);
+                   enqueue(x);
+                   break;
+            case 2:c=dequeue();
+                   if(c==-1)
+                   {
+                       printf("queue is underflow");
+                   }
+                   else
+                   {
+                       printf("%d is elemenrt deleted",x);
+                   }
+                   break;
+            case 3:printf("the elements in queue are:");
+                   display();
+                   break;
+            case 4:exit(1);
+        }
+    }
+}
